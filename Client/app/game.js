@@ -18,7 +18,6 @@ const getToken = async (authorizationCode) => {
     params.append('client_id', clientId);
     params.append('code', authorizationCode);
     params.append('redirect_uri', redirectUri);
-
     try {
         const response = await fetch(tokenUrl, {
             method: 'POST',
@@ -66,7 +65,7 @@ const fillGamePage = () => {
     </div>
     <div id="findplayer">
         <form id="username" action="" onsubmit="sendMessage(event)">
-            <button>Find player.</button>
+            <button>Find another player.</button>
         </form>
     </div>`;
     }
@@ -186,7 +185,7 @@ const sendMessage = (event) => {
     // Create a WebSocket connection
     ws = new WebSocket(`wss://${window.location.hostname}:8080/game/ws/${client_id}/${username}`);
 
-    document.getElementById("username").innerHTML = `User: <b>${username}</b>`;
+    document.getElementById("username").innerHTML = `Your Username: <b>${username}</b>`;
 
     ws.onopen = function (event) {
         console.log("WebSocket connection established.");
@@ -199,7 +198,7 @@ const sendMessage = (event) => {
         console.log(data);
         if (data.board) {
             updateBoard(data.board);
-            document.getElementById("opponent").innerHTML = `User: <b>${data.opponent}</b>`;
+            document.getElementById("opponent").innerHTML = `Opponent username: <b>${data.opponent}</b>`;
             document.getElementById("message").innerText = data.message;
         } else {
             document.getElementById("message").innerText = data.message;

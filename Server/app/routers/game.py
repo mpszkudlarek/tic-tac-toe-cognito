@@ -21,9 +21,9 @@ APP_CLIENT_ID = '4atad40os2e7ld1h6dmscm2n3u'  # App client id from Cognito UI
 
 # Below are the temporary credentials from AWS 
 os.environ[
-    'AWS_SESSION_TOKEN'] = 'IQoJb3JpZ2luX2VjEPD//////////wEaCXVzLXdlc3QtMiJGMEQCIHty8aPUwAFj9WD/xhbYW9mUes5yDcueXHyuqb/YDomiAiA6PgX6BgVg/gC2Nv0FxsXZAVH7myYkdhY+IU7VuQIUiiqsAgh5EAAaDDA3NzEzNzc1ODkwNiIMkEXRSRxcGnwJ1kTnKokCYWonqMYmrejE44wqdLbmE5s/N8qDeRfLkDp1uZ1WGEqf2RdNGbCUuWKMM3+5hFaFahDMDJSPLEim9ai0Oh3LGV1DfMZWBymT/+3uZKejmKnBSiqUQPyDaCm26bR0eolxiU6eDHHzScl2U2/vqquoYE7PdY7Pruld5oFfXjUFrDX0/jwbC9COw/SD3PQz+bLFdrY2rMjmpdbakPlrCwXmE++tN0DyIP4Hr2/AJ5e7uhw7hMrxD+NOxopq8cVCpThcfAzGQZ42fZw8d7iYavlOnobR834e/sJ73vzsbqEJsasKXoiQsmz5lnS3THIMrgyRU+PB8N6L2TwJeRWreVrsDUPQocFG1tIIZDCArPKyBjqeAY5Oc6+japEPIdkkZ4JW2amKkcBo92ISr0jHez0wY2FUBnixsBP7wxMyjBn6HBzvkSPSEpTHRpmu7pcaqPFjS6C6UuSbXRWkVkPLQ/uxhBSnazb7TN9tWUzZRud3Z483GybWVHsAoeVysPY4yrqJwQFqtq6QlNp37MQC913/DnKT/uaEwi+9SFB8G46eaMqnZnlhY339kPr0/tKkk4Je'
-os.environ['AWS_ACCESS_KEY_ID'] = 'ASIARD5OEZK5HDBOJP7J'
-os.environ['AWS_SECRET_ACCESS_KEY'] = '8ToPwHvsAnXvv3XsowAuz0KWQIIBLjVNRoo2rKvY'
+    'AWS_SESSION_TOKEN'] = 'IQoJb3JpZ2luX2VjEPT//////////wEaCXVzLXdlc3QtMiJHMEUCIBuNr9wnRHtD3bWOVyHqnpx/wo+Q8YcBfR0T/CkQq7AAAiEA/aqiS2JFpw0hmo0t2Mq5rcTCDuvZsenrEjXl7+aAlv8qrAIIfRAAGgwwNzcxMzc3NTg5MDYiDOhR6kzUWJp/NMYBviqJArQ62Yt7XoNzDOuALE4lBwVzG//9W5FWTl8R0K+y264G07FT/aAMiBkuhDqoBY365kxRl0J44bblJd5b9izRdbQ8gso8CP1xxi1H2Hbp6PcnC2ECRS5cRi3wFi3eSHwDIM6X0PW7AIGc0y5dC1Z+TSbJEUuFw8/pkDhLhX1Hze4mD7LhdLkaCcCFX+ICAeSvIfwfn2/IRLYK2sAeKbohbkbZFEhVdvdqM/9yxrmlvvqcyTaD1j9aFuYa9yAYLxx9hwAxLJvi6DmTWZgbiHVE67l3Hm1zn/n+8iCnvB5GCcIP1uGvw12SJE+wa6zrusv5PsvemDCKSwdyC2qKVP/1QrIX558UP8ECNEIw/5/zsgY6nQEvr9CRbvtwQqaKqtUeKZsoC4gcKcNtnRItR3ilyfGEM6wFLPi2z2k15KA2K/7BpZMzgeNKOMynASGPY0qZPrUC+w4xkQ+JVevl5vno7F/QzEDu7cy/iRJ96JTs5X3hUcEkx0NZCYe4Poix7PhS6PTQQlAy0x54iSPcPV1r7rKyVaN28v5APxsuV3ZnqJCbY7IB58GB2Ptz68Wm6Eff'
+os.environ['AWS_ACCESS_KEY_ID'] = 'ASIARD5OEZK5DQS7HD4R'
+os.environ['AWS_SECRET_ACCESS_KEY'] = 'Chb+A/mHDTJs/XItvNg3us/1bfWfrLUak+jQhIE5'
 os.environ['AWS_DEFAULT_REGION'] = REGION
 
 
@@ -96,7 +96,6 @@ class ConnectionManager:
         self.active_connections[self.waiting_connection.client_id].player = 'X'
         print(games)
         await self.waiting_connection.send_json({"board": [[' ' for _ in range(3)] for _ in range(3)], "message": "Opponent found, your turn.", "opponent": user.username})
-        # await self.waiting_connection.send_text(f"{user.client_id} has joined.")
         self.waiting_connection = None
 
     async def end_game(
@@ -128,14 +127,12 @@ def save_result(player1: str, player2: str, winner: str):
 
 @router.websocket("/ws/{client_id}/{username}")
 async def websocket_endpoint(websocket: WebSocket, client_id: int, username: str):
-    # await websocket.accept()
     websocket.client_id = client_id  # Assign a client ID to the websocket
     websocket.username = username
     try:
         await manager.connect(websocket)
     except:
         return
-    # if (manager.waiting_connection != websocket):
     try:
         if manager.waiting_connection != websocket:
             await websocket.send_json({"board": [[' ' for _ in range(3)] for _ in range(3)], "message": "Waiting for opponent's move...",
@@ -151,12 +148,10 @@ async def websocket_endpoint(websocket: WebSocket, client_id: int, username: str
                 if (game.current_player == websocket.player):
                     if game.make_move(row, col):
                         if game.check_winner():
-                            # TODO: tutaj zakomentowane byklo na dole
                             save_result(username, manager.active_connections[manager.active_connections[client_id].partner_id].username, username)
-                            await manager.end_game(websocket, "You win!!!", "You lose.", client_id, game, game_id)
+                            await manager.end_game(websocket, "You win!", "You lose.", client_id, game, game_id)
                             break
                         if game.check_draw():
-                            # TODO: tutaj bylo zakomentowane
                             save_result(username, manager.active_connections[manager.active_connections[client_id].partner_id].username, "draw")
                             await manager.end_game(websocket, "Draw!!!", "Draw!!!", client_id, game, game_id)
                             break

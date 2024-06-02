@@ -42,23 +42,10 @@ resource "aws_security_group" "my_security_group" {
   # Grupa zabezpieczeń: Zawiera zestaw reguł, które określają dozwolony ruch przychodzący i wychodzący
   # dla skojarzonych zasobów, jak instancje EC2.
 
-  ingress {
-    from_port   = 80
-    to_port     = 80
-    protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
 
   ingress {
     from_port   = 443
     to_port     = 443
-    protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-
-  ingress {
-    from_port   = 8080
-    to_port     = 8080
     protocol    = "tcp"
     cidr_blocks = ["0.0.0.0/0"]
   }
@@ -123,8 +110,8 @@ resource "aws_ecs_task_definition" "terraformtask" {
   task_role_arn            = "arn:aws:iam::781937605669:role/LabRole"
   container_definitions    = jsonencode([
     {
-      name         = "Frontend"
-      image        = "781937605669.dkr.ecr.us-east-1.amazonaws.com/tictactoe-frontend"
+      name         = "awsttt-frontend"
+      image        = "077137758906.dkr.ecr.us-east-1.amazonaws.com/awsttt-frontend"
       cpu          = 512
       memory       = 1024
       essential    = true
@@ -153,8 +140,8 @@ resource "aws_ecs_task_definition" "terraformtask" {
       }
     },
     {
-      name         = "Backend"
-      image        = "781937605669.dkr.ecr.us-east-1.amazonaws.com/tictactoe-backend"
+      name         = "awsttt-backend "
+      image        = "077137758906.dkr.ecr.us-east-1.amazonaws.com/awsttt-backend "
       cpu          = 512
       memory       = 1024
       essential    = true
@@ -185,5 +172,18 @@ resource "aws_ecs_service" "terraformservice" {
     subnets          = [aws_subnet.public_subnet_1.id, aws_subnet.public_subnet_2.id]
     security_groups  = [aws_security_group.my_security_group.id]
     assign_public_ip = true
+  }
+}
+
+# Create VPC endpoint for DynamoDB
+resource "aws_vpc_endpoint" "dynamodb" {
+  vpc_id            = aws_vpc.my_vpc.id
+  service_name      = "com.amazonaws.us-east-1.dynamodb"
+  vpc_endpoint_type = "Gateway"
+
+  route_table_ids = [aws_route_table.public.id]
+
+  tags = {
+    Name = "P2TerraformVPCendpoint"
   }
 }
