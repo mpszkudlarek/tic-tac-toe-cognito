@@ -1,0 +1,17 @@
+Login:
+aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 077137758906.dkr.ecr.us-east-1.amazonaws.com
+
+# 077137758906 is the account id of the aws user
+Backend:
+aws ecr create-repository --repository-name tictactoe-backend --region us-east-1
+
+docker tag tictactoe-backend:latest 077137758906.dkr.ecr.us-east-1.amazonaws.com/tictactoe-backend
+
+docker push 077137758906.dkr.ecr.us-east-1.amazonaws.com/tictactoe-backend
+
+Frontend:
+aws ecr create-repository --repository-name tictactoe-frontend --region us-east-1
+
+docker tag tictactoe-frontend:latest 077137758906.dkr.ecr.us-east-1.amazonaws.com/tictactoe-frontend
+
+docker push 077137758906.dkr.ecr.us-east-1.amazonaws.com/tictactoe-frontend

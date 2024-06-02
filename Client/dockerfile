@@ -1,0 +1,17 @@
+# Use a lightweight web server image
+FROM node:alpine AS builder
+
+# Set the working directory inside the container
+WORKDIR /app
+
+# Copy all files to the working directory
+COPY . .
+
+# Install http-server
+RUN npm install -g http-server
+
+# Expose the port your app runs on
+EXPOSE 443
+
+# Command to start http-server and serve your frontend files
+CMD ["http-server", "-S", "-c", "cert.pem", "--port", "443"]

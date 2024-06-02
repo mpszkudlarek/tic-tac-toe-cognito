@@ -1,0 +1,20 @@
+version: '3.8'
+services:
+  backend:
+    build: ./Server # Path to the directory containing your FastAPI app and Dockerfile
+    ports:
+      - "8080:8080" # Map port 8000 of the host to port 8000 of the container
+    networks:
+      - mynetwork
+
+  frontend:
+    build: ./Client # Path to the directory containing your Flask frontend app and Dockerfile
+    ports:
+      - "443:443" # Map port 5000 of the host to port 5000 of the container
+    networks:
+      - mynetwork
+    depends_on:
+      - backend # Ensure that the backend service is started first
+
+networks:
+  mynetwork:
