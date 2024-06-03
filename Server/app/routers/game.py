@@ -21,9 +21,9 @@ APP_CLIENT_ID = '4atad40os2e7ld1h6dmscm2n3u'  # App client id from Cognito UI
 
 # Below are the temporary credentials from AWS 
 os.environ[
-    'AWS_SESSION_TOKEN'] = 'IQoJb3JpZ2luX2VjEPT//////////wEaCXVzLXdlc3QtMiJHMEUCIBuNr9wnRHtD3bWOVyHqnpx/wo+Q8YcBfR0T/CkQq7AAAiEA/aqiS2JFpw0hmo0t2Mq5rcTCDuvZsenrEjXl7+aAlv8qrAIIfRAAGgwwNzcxMzc3NTg5MDYiDOhR6kzUWJp/NMYBviqJArQ62Yt7XoNzDOuALE4lBwVzG//9W5FWTl8R0K+y264G07FT/aAMiBkuhDqoBY365kxRl0J44bblJd5b9izRdbQ8gso8CP1xxi1H2Hbp6PcnC2ECRS5cRi3wFi3eSHwDIM6X0PW7AIGc0y5dC1Z+TSbJEUuFw8/pkDhLhX1Hze4mD7LhdLkaCcCFX+ICAeSvIfwfn2/IRLYK2sAeKbohbkbZFEhVdvdqM/9yxrmlvvqcyTaD1j9aFuYa9yAYLxx9hwAxLJvi6DmTWZgbiHVE67l3Hm1zn/n+8iCnvB5GCcIP1uGvw12SJE+wa6zrusv5PsvemDCKSwdyC2qKVP/1QrIX558UP8ECNEIw/5/zsgY6nQEvr9CRbvtwQqaKqtUeKZsoC4gcKcNtnRItR3ilyfGEM6wFLPi2z2k15KA2K/7BpZMzgeNKOMynASGPY0qZPrUC+w4xkQ+JVevl5vno7F/QzEDu7cy/iRJ96JTs5X3hUcEkx0NZCYe4Poix7PhS6PTQQlAy0x54iSPcPV1r7rKyVaN28v5APxsuV3ZnqJCbY7IB58GB2Ptz68Wm6Eff'
-os.environ['AWS_ACCESS_KEY_ID'] = 'ASIARD5OEZK5DQS7HD4R'
-os.environ['AWS_SECRET_ACCESS_KEY'] = 'Chb+A/mHDTJs/XItvNg3us/1bfWfrLUak+jQhIE5'
+    'AWS_SESSION_TOKEN'] = 'IQoJb3JpZ2luX2VjEAIaCXVzLXdlc3QtMiJHMEUCIQCK1FV+ve3AOlMUYRPHyszbVeEKhna2kSc4NJDaaoHJPAIgbczlTY7zoBmINm7GZMl1dCcM8Y5wyqPSP7s0ULbv/KgqtQIIi///////////ARAAGgwwNzcxMzc3NTg5MDYiDAP1sZrQFRW+yjyzGSqJAsLGZCJYV3m6coJGhOjdqiugk4jqVKLyE2yw4IhphRWQdQyp28Hcx8q+t1LGocQ3CoixOLUMBSpdhLCUxb7z47kZ0HR/hNjsNpc1xna4S4Lo9zUk7bFS3+XXIpQIQ8hCVYszBPCqm4FU29iFNYTWt1KROfvdX5TuyesVNC3VmGj8HXyqkmusSx2PSoZjZv5xjXx+3Im3onxSjzTc0gs/Wi7BGq5UMiRk/O1E7hZpnAKkDUiulIfarbycUwzZK3Oim+y0KNO2FuTAda+dNR4qdIC8TcPhG6wgI5LPc74YPW840V3Chwuq2StsOcpTJj1Z62QmNbkoZIb6HzVCb56bZsUVxJt6Wzk3O+8w25r2sgY6nQHwbeRMjBD0FhMbBdxVi4AwB7A0PFAuk8KT1kW6tGSNz7Q0jEVqSgREBm24IwAM66I/nbK1NjGCqKVd0sy6pHBX4SsJJMflkcsjNL/Swh2p/SUfbfSHFuACxx7VFtoWWIqgihMEo21wlwG3RhdS3VXwTzKQBtHMaonvFTJlagcpG6iwYbHPugfJhc0ojmx+EPbpGbjuQEhsCwSi6Rf8'
+os.environ['AWS_ACCESS_KEY_ID'] = 'ASIARD5OEZK5GNLTYO5M'
+os.environ['AWS_SECRET_ACCESS_KEY'] = 'nhnGbgbf6E4Dz+lndHjZAfIlpHQdnmj7rZu7P77A'
 os.environ['AWS_DEFAULT_REGION'] = REGION
 
 
@@ -145,7 +145,7 @@ async def websocket_endpoint(websocket: WebSocket, client_id: int, username: str
                 print(game_id)
                 game = games[game_id]
 
-                if (game.current_player == websocket.player):
+                if game.current_player == websocket.player:
                     if game.make_move(row, col):
                         if game.check_winner():
                             save_result(username, manager.active_connections[manager.active_connections[client_id].partner_id].username, username)
