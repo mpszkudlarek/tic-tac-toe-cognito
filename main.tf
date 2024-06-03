@@ -73,7 +73,7 @@ resource "aws_subnet" "terraform_public_subnet_1" {
     Name = "My_Terraform_Public_Subnet_1"
   }
 }
-# 
+# druga po to, jakby pierwsza nie działała
 
 resource "aws_subnet" "terraform_public_subnet_2" {
   vpc_id            = aws_vpc.terraform_vpc.id
