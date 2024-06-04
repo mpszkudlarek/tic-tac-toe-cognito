@@ -109,13 +109,13 @@ resource "aws_ecs_cluster" "terraform_cluster" {
   }
 }
 
-# Create task
 resource "aws_ecs_task_definition" "terraform_task" {
   family = "terraformfamily" # nazwa rodziny zadań
   requires_compatibilities = ["FARGATE"] # platforma uruchomieniowa
   network_mode = "awsvpc" # tryb sieciowy
-  cpu = 1024 # ilość zasobów CPU
-  memory = 2048 # ilość pamięci
+  cpu = 1024 # ilość zasobów CPU https://docs.aws.amazon.com/AmazonECS/latest/developerguide/task_definition_parameters.html
+  # czyli 1024 jednostki CPU równa się jednemu vCPU (wirtualny procesor), czyli backend i frontend ma po 0.5 vCPU
+  memory = 2048 # ilość pamięci, czyli tutaj jest po 1Gb ramu na jeden kontener
   execution_role_arn = "arn:aws:iam::077137758906:role/LabRole" # Amazon Resource Name (ARN) roli IAM, execution jest uzywana do zarzadzania konterami 
   task_role_arn = "arn:aws:iam::077137758906:role/LabRole" # rola task jest uzywana przez aplikacje w kontenerach do dostępu do usług AWS
   container_definitions = jsonencode([
@@ -186,7 +186,7 @@ resource "aws_vpc_endpoint" "terraform_dynamodb_endpoint" {
   service_name = "com.amazonaws.us-east-1.dynamodb" # nazwa usługi, dla której tworzony jest endpoint
   vpc_endpoint_type = "Gateway" # typ endpointu
 
-  route_table_ids = [aws_route_table.public.id] # tabel trasowania, które mają być skojarzone z endpointem, umożliwiając trasowanie ruchu do DynamoDB przez ten endpoint.
+  route_table_ids = [aws_route_table.public.id] # tabela trasowania, które mają być skojarzone z endpointem, umożliwiając trasowanie ruchu do DynamoDB przez ten endpoint.
 
   tags = {
     Name = "My_Terraform_DynamoDB_Endpoint"
