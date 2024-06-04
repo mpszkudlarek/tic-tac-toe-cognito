@@ -15,16 +15,17 @@ router = APIRouter(prefix="/game", responses={404: {"description": "Not found"}}
 
 games = {}
 
-REGION = 'us-east-1'  # North Virginia
-USERPOOL_ID = 'us-east-1_Lm3EUTsrB'  # User pool from Cognito UI
-APP_CLIENT_ID = '4atad40os2e7ld1h6dmscm2n3u'  # App client id from Cognito UI
+REGION = os.getenv('AWS_DEFAULT_REGION')
+USERPOOL_ID = os.getenv('USERPOOL_ID')
+APP_CLIENT_ID = os.getenv('APP_CLIENT_ID')
+AWS_SESSION_TOKEN = os.getenv('AWS_SESSION_TOKEN')
+AWS_ACCESS_KEY_ID = os.getenv('AWS_ACCESS_KEY_ID')
+AWS_SECRET_ACCESS_KEY = os.getenv('AWS_SECRET_ACCESS_KEY')
 
-# Below are the temporary credentials from AWS 
-os.environ[
-    'AWS_SESSION_TOKEN'] = 'IQoJb3JpZ2luX2VjEAIaCXVzLXdlc3QtMiJHMEUCIQCK1FV+ve3AOlMUYRPHyszbVeEKhna2kSc4NJDaaoHJPAIgbczlTY7zoBmINm7GZMl1dCcM8Y5wyqPSP7s0ULbv/KgqtQIIi///////////ARAAGgwwNzcxMzc3NTg5MDYiDAP1sZrQFRW+yjyzGSqJAsLGZCJYV3m6coJGhOjdqiugk4jqVKLyE2yw4IhphRWQdQyp28Hcx8q+t1LGocQ3CoixOLUMBSpdhLCUxb7z47kZ0HR/hNjsNpc1xna4S4Lo9zUk7bFS3+XXIpQIQ8hCVYszBPCqm4FU29iFNYTWt1KROfvdX5TuyesVNC3VmGj8HXyqkmusSx2PSoZjZv5xjXx+3Im3onxSjzTc0gs/Wi7BGq5UMiRk/O1E7hZpnAKkDUiulIfarbycUwzZK3Oim+y0KNO2FuTAda+dNR4qdIC8TcPhG6wgI5LPc74YPW840V3Chwuq2StsOcpTJj1Z62QmNbkoZIb6HzVCb56bZsUVxJt6Wzk3O+8w25r2sgY6nQHwbeRMjBD0FhMbBdxVi4AwB7A0PFAuk8KT1kW6tGSNz7Q0jEVqSgREBm24IwAM66I/nbK1NjGCqKVd0sy6pHBX4SsJJMflkcsjNL/Swh2p/SUfbfSHFuACxx7VFtoWWIqgihMEo21wlwG3RhdS3VXwTzKQBtHMaonvFTJlagcpG6iwYbHPugfJhc0ojmx+EPbpGbjuQEhsCwSi6Rf8'
-os.environ['AWS_ACCESS_KEY_ID'] = 'ASIARD5OEZK5GNLTYO5M'
-os.environ['AWS_SECRET_ACCESS_KEY'] = 'nhnGbgbf6E4Dz+lndHjZAfIlpHQdnmj7rZu7P77A'
-os.environ['AWS_DEFAULT_REGION'] = REGION
+required_vars = [REGION, USERPOOL_ID, APP_CLIENT_ID, AWS_SESSION_TOKEN, AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY]
+if any(var is None for var in required_vars):
+    logger.error("One or more environment variables are not set.")
+    raise EnvironmentError("Essential environment variables are not set.")
 
 
 def authorize(token):
